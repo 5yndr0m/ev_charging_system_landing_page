@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Calendar, Clock, MapPin, Zap, Plus, X } from "lucide-react"
+import { API_BASE_URL } from "@/lib/api"
 
 interface Booking {
   _id: string
@@ -33,7 +34,7 @@ export default function BookingsPage() {
       const fetchBookings = async () => {
         try {
           const userToken = localStorage.getItem("token")
-          const res = await fetch("http://localhost:5000/api/bookings/my", {
+          const res = await fetch(`${API_BASE_URL}/bookings/my`, {
             headers: { Authorization: `Bearer ${userToken}` }
           })
           if (res.ok) {

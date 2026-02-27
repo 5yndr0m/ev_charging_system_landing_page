@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { MapPin, Zap, Battery, ArrowLeft, CheckCircle } from "lucide-react"
+import { API_BASE_URL } from "@/lib/api"
 
 interface Station {
   _id: string
@@ -50,7 +51,7 @@ export default function CreateBookingPage() {
     // Fetch Stations
     const fetchStations = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/stations/")
+        const res = await fetch(`${API_BASE_URL}/stations/`)
         if (res.ok) {
           const data = await res.json()
           setStations(Array.isArray(data) ? data : (data.data || []))
@@ -99,7 +100,7 @@ export default function CreateBookingPage() {
 
       // Hack for frontend: We need to pull the vehicle ID. We'll just fetch `/api/vehicles/my` before submitting to get the first one.
       const userToken = localStorage.getItem("token")
-      const vRes = await fetch("http://localhost:5000/api/vehicles/my", {
+      const vRes = await fetch(`${API_BASE_URL}/vehicles/my`, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
       let vehicleId = null;
@@ -110,7 +111,7 @@ export default function CreateBookingPage() {
       payload["vehicleId"] = vehicleId;
 
       // Hack for Charger ID:
-      const cRes = await fetch(`http://localhost:5000/api/chargers/available?stationId=${formData.stationId}`);
+      const cRes = await fetch(`${API_BASE_URL}/chargers/available?stationId=${formData.stationId}`);
       if (cRes.ok) {
         const cData = await cRes.json();
         if (cData.data && cData.data.length > 0) payload["chargerId"] = cData.data[0]._id;
@@ -121,7 +122,7 @@ export default function CreateBookingPage() {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/bookings", {
+      const res = await fetch(`${API_BASE_URL}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

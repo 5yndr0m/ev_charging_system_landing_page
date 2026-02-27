@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 
 import { MapPin, Zap, Battery, Wifi, Calendar } from "lucide-react"
 import Link from "next/link"
+import { API_BASE_URL } from "@/lib/api"
 
 interface Station {
   _id: string
@@ -35,7 +36,7 @@ export default function StationList({ selectedStation, setSelectedStation, filte
 
     const fetchStations = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/stations/")
+        const res = await fetch(`${API_BASE_URL}/stations/`)
         if (res.ok) {
           const data = await res.json()
           if (isMounted) {

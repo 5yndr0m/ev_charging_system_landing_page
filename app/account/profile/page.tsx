@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { LogOut, User, History, Calendar } from "lucide-react"
 import Link from "next/link"
+import { API_BASE_URL } from "@/lib/api"
 
 interface UserData {
   name: string
@@ -29,7 +30,7 @@ export default function ProfilePage() {
       const fetchVehicles = async () => {
         try {
           const userToken = localStorage.getItem("token")
-          const res = await fetch("http://localhost:5000/api/vehicles/my", {
+          const res = await fetch(`${API_BASE_URL}/vehicles/my`, {
             headers: { Authorization: `Bearer ${userToken}` }
           })
           if (res.ok) {
